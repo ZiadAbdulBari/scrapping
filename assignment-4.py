@@ -15,6 +15,8 @@ product_name = driver.find_element(By.XPATH,'//*[@id="module_product_title_1"]/d
 print(product_name.text)
 rating = driver.find_element(By.XPATH,'//*[@id="module_product_review_star_1"]/div/a[1]')
 print(rating.text.split(' ')[0])
+current_price = driver.find_element(By.XPATH,'//*[@id="module_product_price_1"]/div/div/span')
+print(current_price.text.split(' ')[1])
 image = driver.find_element(By.XPATH,'//*[@id="module_item_gallery_1"]/div/div[1]/div/img[2]')
 image_link = image.get_attribute('src')
 download_image = requests.get(image_link).content
@@ -22,5 +24,8 @@ with open("downloaded_image.jpg", "wb") as file:
     file.write(download_image)
 all_rating = []
 for i in range (1,5):
-    rating_count = driver.find_element(By.XPATH,'[@id="module_product_review"]/div/div/div[1]/div[2]/div/div/div[2]/ul/li['+str(i)+']/span[2]')
+    rating_count = driver.find_element(By.XPATH,'//*[@id="module_product_review"]/div/div/div[1]/div[2]/div/div/div[2]/ul/li['+str(i)+']/span[2]')
     all_rating.append(rating_count.text)
+print(all_rating)
+overall_rating = driver.find_element(By.XPATH,'//*[@id="module_product_review"]/div/div/div[1]/div[2]/div/div/div[1]/div[1]/span[1]')
+print(overall_rating.text)
