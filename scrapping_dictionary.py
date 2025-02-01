@@ -14,3 +14,5 @@ for i in range (1,3):
         link = driver.find_element(By.CSS_SELECTOR,'#root > div > div.ant-row.FrEdP.css-1bkhbmc.app > div:nth-child(1) > div > div.ant-col.ant-col-20.ant-col-push-4.Jv5R8.css-1bkhbmc.app > div._17mcb > div:nth-child('+change_type+') > div > div > div.ICdUp > div > a')
         store_link.append(link.get_attribute('href'))
     store_product_link['Page-'+str(i)+''] = store_link
+print(store_product_link)
+driver.quit()

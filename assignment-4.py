@@ -29,3 +29,5 @@ for i in range (1,5):
 print(all_rating)
 overall_rating = driver.find_element(By.XPATH,'//*[@id="module_product_review"]/div/div/div[1]/div[2]/div/div/div[1]/div[1]/span[1]')
 print(overall_rating.text)
+
+driver.quit()
