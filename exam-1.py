@@ -5,11 +5,12 @@ from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 
+# Create text field and button
 root = tk.Tk()
-root.geometry("300x200")
+root.geometry("800x600")
 search_text = ""
+# get the text after clicking the submit button
 def get_entry_value():
     global search_text
     search_text += input_field.get()
@@ -18,13 +19,12 @@ def get_entry_value():
 root.title('Google Search')
 label = tk.Label(root, text='Search text')
 label.pack()
-input_field = tk.Entry(root)
-input_field.pack()
-button = tk.Button(root, text='Stop', width=25, command=get_entry_value)
+input_field = tk.Entry(root,width=100)
+input_field.pack(pady=10)
+button = tk.Button(root, text='Submit', width=25,height=1, command=get_entry_value)
 button.pack()
 root.mainloop()
-time.sleep(10)
-
+# Initialize the webdriver
 chrome_options = Options()
 chrome_options.add_argument("--disable-cache")
 chrome_options.add_argument("--incognito")
@@ -36,13 +36,13 @@ search_box = driver.find_element(By.NAME,"q")
 search_box.send_keys(search_text)
 search_box.send_keys(Keys.RETURN)
 time.sleep(10)
+
+# search the text
 store_web_links = []
 for page in range(0,3):
     height = driver.execute_script('return document.body.scrollHeight')
-
     for i in range(0,height+1500,30):
         driver.execute_script(f'window.scrollTo(0,{i});')
-        time.sleep(0.5)
     
     web_links = driver.find_elements(By.CSS_SELECTOR, '[jsname="UWckNb"]')
     time.sleep(5)
@@ -53,11 +53,13 @@ for page in range(0,3):
     time.sleep(0.5)
     next_btn.click()
 driver.quit()
+
+# show the links into the table
 root = tk.Tk()
 columns = ("Web Links")
-table = ttk.Treeview(root, columns=columns, show="headings", height=10)
+table = ttk.Treeview(root, columns=columns, show="headings", height=100)
 table.heading(0, text='Web Links')
-table.column(0, width=200)
+table.column(0, width=300)
 for row in store_web_links:
     table.insert("", tk.END, values=row)
 table.pack(pady=20)
