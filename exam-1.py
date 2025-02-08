@@ -17,13 +17,14 @@ def get_entry_value():
     root.destroy()
 
 root.title('Google Search')
-label = tk.Label(root, text='Search text')
+label = tk.Label(root, text='Search text',font=("Helvetica", 13))
 label.pack()
-input_field = tk.Entry(root,width=100)
-input_field.pack(pady=10)
-button = tk.Button(root, text='Submit', width=25,height=1, command=get_entry_value)
+input_field = tk.Entry(root,width=100,font=("Helvetica", 18))
+input_field.pack(padx=10, pady=10)
+button = tk.Button(root, text='Submit', width=25,height=2,background = "black", fg = "white",command=get_entry_value)
 button.pack()
 root.mainloop()
+time.sleep(5)
 # Initialize the webdriver
 chrome_options = Options()
 chrome_options.add_argument("--disable-cache")
@@ -43,7 +44,7 @@ for page in range(0,3):
     height = driver.execute_script('return document.body.scrollHeight')
     for i in range(0,height+1500,30):
         driver.execute_script(f'window.scrollTo(0,{i});')
-    
+        time.sleep(0.2)
     web_links = driver.find_elements(By.CSS_SELECTOR, '[jsname="UWckNb"]')
     time.sleep(5)
     for j in web_links:
