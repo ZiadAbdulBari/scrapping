@@ -1,8 +1,12 @@
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+import re
 chrome_options = Options()
 chrome_options.add_argument('--disable-cache')
 chrome_options.add_argument('--incognito')
@@ -13,8 +17,30 @@ driver.refresh()
 search_box = driver.find_element(By.NAME,"q")
 search_box.send_keys("Laptop shop near dhanmondi")
 search_box.send_keys(Keys.RETURN)
-time.sleep(10)
+time.sleep(20)
 driver.find_element(By.XPATH,'//*[@id="hdtb-sc"]/div/div[1]/div[1]/div/div[2]/a').click()
-
 time.sleep(10)
+select_place = driver.find_element(By.CLASS_NAME,'Ntshyc')
+action = ActionChains(driver)
+action.move_to_element(select_place).click().perform()
+scroll_div = driver.find_element(By.XPATH,'//*[@id="QA0Szd"]/div/div/div[1]/div[2]/div/div[1]/div/div/div[1]/div[1]')
+height = driver.execute_script('return arguments[0].scrollHeight',scroll_div)
+for i in range(0,height+1500,30):
+    driver.execute_script("arguments[0].scrollTop = arguments[1]", scroll_div, i)
+    time.sleep(0.2)
+get_add_leads = driver.find_elements(By.CLASS_NAME,'UaQhfb')
+store_phone_number = []
+for i in get_add_leads:
+    split_text = str(i.text).split('\n')
+    lenght = len(split_text)
+    phone_number = split_text[lenght-1]
+    print(phone_number)
+    pattern = r"^\d{5}-\d{6}$"
+    if re.match(pattern, phone_number):
+        match_pattern = re.match(pattern, phone_number)
+        print(match_pattern.group())
+        # store_phone_number.append(match_pattern.group())       
+    time.sleep(0.5)
+# print(store_phone_number)       
+    
 driver.quit()
