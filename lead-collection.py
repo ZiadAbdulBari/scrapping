@@ -31,16 +31,9 @@ for i in range(0,height+1500,30):
 get_add_leads = driver.find_elements(By.CLASS_NAME,'UaQhfb')
 store_phone_number = []
 for i in get_add_leads:
-    split_text = str(i.text).split('\n')
-    lenght = len(split_text)
-    phone_number = split_text[lenght-1]
-    print(phone_number)
-    pattern = r"^\d{5}-\d{6}$"
-    if re.match(pattern, phone_number):
-        match_pattern = re.match(pattern, phone_number)
-        print(match_pattern.group())
-        # store_phone_number.append(match_pattern.group())       
-    time.sleep(0.5)
-# print(store_phone_number)       
+    match_pattern = re.findall("\d{5}-\d{6}", i.text)
+    if match_pattern:
+        store_phone_number.append(match_pattern[0])
+print(store_phone_number)       
     
 driver.quit()
