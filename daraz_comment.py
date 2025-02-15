@@ -3,7 +3,6 @@ sys.stdout.reconfigure(encoding='utf-8')
 from selenium import webdriver
 import time
 from selenium.webdriver.common.by import By 
-import re
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -15,7 +14,7 @@ driver = webdriver.Chrome(options=chrome_options)
 
 driver.maximize_window()
 
-driver.get('https://www.daraz.com.bd/products/mercusys-ac12-ac1200-i373299504.html?spm=a2a0e.searchlistcategory.list.22.42433d8flZeCvA')
+driver.get('https://www.daraz.com.bd/products/3-i316734118-s1434548589.html?pvid=2e6f9c66-99d9-48db-bdc6-27aaad2de32f&search=jfy&scm=1007.51705.413671.0&spm=a2a0e.tm80335411.just4u.d_316734118')
 
 height = driver.execute_script('return document.body.scrollHeight')
 
@@ -28,21 +27,21 @@ for i in range(0,height,30):
 wait = WebDriverWait(driver, 10)
 wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="module_product_review"]/div/div/div[3]/div[2]/div/div')))
 
-loop_list = []
 global element
 element = None
 store_comments = {}
-for i in range(1,6):
+last_page = driver.find_element(By.XPATH,'//*[@id="module_product_review"]/div/div/div[3]/div[2]/div/div/button[5]')
+total_page = int(last_page.text)
+page_number=0
+for i in range(1,total_page+1):
+    page_number=page_number+1
     wait = WebDriverWait(driver, 10)
-    if(i>=4 and i<5):
+    if(i>=4 and i<total_page):
         j='4'
-        loop_list.append(4)
         element = driver.find_element(By.XPATH, f'//*[@id="module_product_review"]/div/div/div[3]/div[2]/div/div/button[{j}]')
-    elif(i==5):
-        loop_list.append(5)
+    elif(i==total_page):
         element = driver.find_element(By.XPATH, '//*[@id="module_product_review"]/div/div/div[3]/div[2]/div/div/button[5]')
     else:
-        loop_list.append(i)
         element = driver.find_element(By.XPATH, f'//*[@id="module_product_review"]/div/div/div[3]/div[2]/div/div/button[{i}]')
 
     driver.execute_script("arguments[0].scrollIntoView();", element)
@@ -51,7 +50,7 @@ for i in range(1,6):
     for index,comment in enumerate(all_comment):
         if not index==0:
             comment_list.append(comment.text)
-    store_comments[f"Page-{i}"]=comment_list
+    store_comments[f"Page-{page_number}"]=comment_list
     driver.execute_script("arguments[0].click();", element)
     time.sleep(5)
 
